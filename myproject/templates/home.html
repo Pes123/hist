@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛИТМО в годы блокады</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .dynamic-textarea {
+            max-height: 300px; /* Установите максимальную высоту для textarea */
+            overflow-y: auto; /* Включите вертикальную прокрутку при переполнении */
+            width: 100%; /* Задайте ширину 100% для соответствия контейнеру */
+            resize: none; /* Отключите возможность изменения размера textarea пользователем */
+        }
+        .text-details {
+            display: none; /* Скрываем текст по умолчанию */
+        }
+        .text-details.shown {
+            display: block; /* Показываем текст при его активации */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home'%}">Главная</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'posts:text_list' %}">Список Эссе</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'posts:text_entry' %}">Добавить Эссе</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="background-image d-flex justify-content-center align-items-center vh-100">
+        <div class="text-center">
+            <h1 class="main-title">ЛИТМО в Годы блокады</h1>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-4">
+                    <a href="{% url 'posts:text_special' %}" class="btn btn-primary btn-lg btn-block btn-animated" data-hover="Узнать больше">Эссе участников проекта</a>
+                    <p class="description">Ознакомиться с образцовыми работами участников нашего проекта.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <a href="{% url 'posts:text_entry' %}" class="btn btn-primary btn-lg btn-block btn-animated" data-hover="Принять участие">Конкурс Эссе</a>
+                    <p class="description">Примите участие в конкурсе эссе на тему Великой Отечественной войны.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <a href="{% url 'posts:text_list' %}" class="btn btn-primary btn-lg btn-block btn-animated" data-hover="Смотреть список">Список работ</a>
+                    <p class="description">Посмотрите работы других участников конкурса.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Information Block -->
+    <div class="container my-5">
+        <div class="card">
+            <div class="card-header">
+                Информация о конкурсе и участниках проекта.
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Конкурс эссе 2025</h5>
+                <p class="card-text">Этот конкурс призван продемонстрировать творческий потенциал студентов и сотрудников ИТМО, а также их вклад в сохранение исторической памяти о блокаде Ленинграда.</p>
+                <p class="card-text"><small class="text-muted">Подача работ открыта до ???</small></p>
+
+                <!-- Centered Text Above Photos -->
+                <div class="text-center my-3">
+                    <p class="lead">Руководители проекта:</p>
+                </div>
+
+                <!-- Photo Placeholders -->
+                <div class="row my-4">
+                    <div class="col-6 text-center">
+                        <img src="{% static 'images/AndreyVladimirovich.jpeg' %}" alt="Portrait 1" class="img-fluid" style="max-width: 200px; height: auto;">
+                        <p>Васильев Андрей Владимирович</p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <img src="{% static 'images/portrait_placeholder.png' %}" alt="Portrait 2" class="img-fluid" style="max-width: 100px; height: auto;">
+                        <p>Имя Участника 2</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        const buttons = document.querySelectorAll('.btn-animated');
+
+        buttons.forEach(button => {
+            const originalText = button.textContent; // Сохраним оригинальный текст
+            
+            button.addEventListener('mouseenter', () => {
+                button.style.backgroundColor = '#0056b3'; // Изменение фона при наведении
+                button.style.transform = 'scale(1.1)'; // Увеличение кнопки
+                button.textContent = button.getAttribute('data-hover'); // Изменение текста
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.style.backgroundColor = ''; // Возвращение к оригинальному цвету
+                button.style.transform = 'scale(1)'; // Возвращение к оригинальному размеру
+                button.textContent = originalText; // Восстановление оригинального текста
+            });
+        });
+
+        // Функция для отображения текста в textarea
+        let currentTextId = null;
+
+        function toggleText(textId) {
+            const textElement = document.getElementById(`text-${textId}`);
+            const textarea = document.getElementById(`textarea-${textId}`);
+            if (currentTextId === textId) {
+                textElement.classList.remove("shown");
+                currentTextId = null; 
+            } else {
+                if (currentTextId !== null) {
+                    const previousTextElement = document.getElementById(`text-${currentTextId}`);
+                    previousTextElement.classList.remove("shown");
+                    
+                    const previousTextarea = document.getElementById(`textarea-${currentTextId}`);
+                    previousTextarea.style.height = 'auto';
+                }
+
+                currentTextId = textId;
+                textElement.classList.add("shown");
+                // Установка высоты textarea 
+                textarea.style.height = 'auto'; 
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+        }
+    </script>
+</body>
+</html>

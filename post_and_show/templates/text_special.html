@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эссе участников проекта</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home'%}">Главная</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'posts:text_list' %}">Список Эссе</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'posts:text_entry' %}">Добавить Эссе</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="background-image">
+        <div class="container">
+            <h1 class="text-center my-4">Эссе участников проекта</h1>
+            <ul class="list-unstyled">
+                {% for text in page_obj %}
+                    <li class="text-item mb-3">
+                        <div class="card p-3">
+                            <p>Автор: <strong>{{ text.user_name }}</strong></p>
+                            <p>Название текста: <strong>{{ text.text_name }}</strong></p>
+                            <p>Рейтинг: {{ text.rating }}</p>
+                            <p>Дата: {{ text.creation_time|date:"d.m.Y H:i" }}</p>
+                            <button class="btn btn-secondary" onclick="toggleText({{ text.id }})">Отобразить текст</button>
+                            <div id="text-{{ text.id }}" class="text-details">
+                                <textarea id="textarea-{{ text.id }}" class="dynamic-textarea" readonly style="overflow: auto; height: 100px;">{{ text.text }}</textarea>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Пагинация -->
+            <div class="pagination text-center">
+                <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+                <div>
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">« Первая</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">« Назад</a>
+                    {% endif %}
+                    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">Вперед »</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя »»</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-image"></div>
+
+    <script>
+        let currentTextId = null;
+
+        function toggleText(textId) {
+            const textElement = document.getElementById(`text-${textId}`);
+            const textarea = document.getElementById(`textarea-${textId}`);
+            if (currentTextId === textId) {
+                textElement.classList.remove("shown");
+                currentTextId = null; 
+            } else {
+                if (currentTextId !== null) {
+                    const previousTextElement = document.getElementById(`text-${currentTextId}`);
+                    previousTextElement.classList.remove("shown");
+                    
+                    const previousTextarea = document.getElementById(`textarea-${currentTextId}`);
+                    previousTextarea.style.height = 'auto';
+                }
+
+                currentTextId = textId;
+                textElement.classList.add("shown");
+                textarea.style.height = 'auto'; 
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+        }
+    </script>
+</body>
+</html>

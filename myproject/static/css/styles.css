@@ -1,0 +1,178 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.footer-image {
+    background-image: url('../images/footer.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+.dynamic-textarea {
+    width: 100%; 
+    max-height: 200px; /* Задайте максимальную высоту для текстового поля */
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    resize: none; 
+    overflow: auto; /* Позволяет прокрутку */
+    transition: height 0.2s ease; 
+}
+
+
+/* Text Display */
+.text-details {
+    max-height: 0; 
+    overflow: hidden; 
+    opacity: 0; 
+    transition: max-height 0.5s ease, opacity 0.5s ease; 
+    margin-top: 10px; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+.shown {
+    max-height: 200px; 
+    opacity: 1; 
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.pagination a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.pagination .current {
+    font-weight: bold;
+}
+
+.main-title {
+    font-family: 'Georgia', serif;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #002859;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.description {
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+    color: #002859;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    opacity: 0.9;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    animation: fadeInUp 1s ease-in-out forwards;
+    animation-delay: 0.5s;
+}
+
+.btn-primary {
+    background-color: rgba(0, 123, 255, 0.7);
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.btn-primary:hover {
+    background-color: rgba(0, 86, 179, 0.7);
+}
+
+.navbar-custom {
+    background-color: #002859; 
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: #ffffff;
+    
+}
+
+.navbar-custom .nav-link:hover {
+    color: #ffcc00; 
+    transition: color 0.5s ease;
+}
+
+.navbar-custom .active {
+    color: #ffcc00; 
+}
+
+.navbar-custom .nav-link.add-essay {
+    color: #ffffff; 
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+}
+.btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-block; /* Убедитесь, что кнопка отображается как блочный элемент */
+}
+
+.btn .text,
+.btn .text-hidden {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+    white-space: nowrap; /* Убедитесь, что текст не переносится */
+}
+
+.btn .text-hidden {
+    opacity: 0; /* Скрытый текст по умолчанию */
+}
+
+.btn:hover .text {
+    opacity: 0; /* Исчезает при наведении */
+}
+
+.btn:hover .text-hidden {
+    opacity: 1; /* Появляется при наведении */
+}
+
+
+.navbar-brand {
+    color: white; /* Цвет текста по умолчанию */
+    transition: color 0.5s ease; /* Плавный переход цвета */
+}
+
+.navbar-brand:hover {
+    color: #ffcc00; /* Цвет текста при наведении */
+    text-decoration: none; /* Убираем подчеркивание */
+}
