@@ -6,4 +6,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name="home"),  # Указываем домашнюю страницу
     path('posts/', include("post_and_show.urls")),  # Подключаем URL конфигурацию приложения "post_and_show"
+    path('accounts/', include('allauth.urls')),
 ]

@@ -33,3 +33,4 @@ class TextEntryForm(forms.ModelForm):
         self.fields['user_name'].label = ''
         self.fields['text_name'].label = ''
         self.fields['text'].label = ''
+

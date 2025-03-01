@@ -8,20 +8,20 @@ from django.core.paginator import Paginator
 
 
 def text_list(request):
-    sort_order = request.GET.get('sort', 'asc')  # Параметр сортировки
-    sort_by = request.GET.get('by', 'rating')  # Параметр выбора сортировки
+    sort_order = request.GET.get('sort', 'asc')  
+    sort_by = request.GET.get('by', 'rating')  
 
     texts = user_text.objects.all()
 
-    # Сортировка по рейтингу или дате
+   
     if sort_by == 'date':
-        texts = texts.order_by('-creation_time' if sort_order == 'desc' else 'creation_time')  # По дате создания
-    else:  # По рейтингу по умолчанию
+        texts = texts.order_by('-creation_time' if sort_order == 'desc' else 'creation_time') 
+    else:  
         texts = texts.order_by('-rating' if sort_order == 'desc' else 'rating')
 
-    paginator = Paginator(texts, 5)  # Пагинация: 3 текста на страницу
-    page_number = request.GET.get('page')  # Получаем номер страницы
-    page_obj = paginator.get_page(page_number)  # Получаем текст для текущей страницы
+    paginator = Paginator(texts, 5)  
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)  
 
     return render(request, 'text_list.html', {'page_obj': page_obj, 'sort_order': sort_order, 'sort_by': sort_by})
 

@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            /* Цвет фона страницы */
+        }
+
+        .signup-container {
+            max-width: 600px;
+            /* Максимальная ширина контейнера регистрации */
+            margin: 50px auto;
+            /* Центрирование контейнера на странице */
+            padding: 20px;
+            /* Внутренние отступы */
+            background-color: white;
+            /* Цвет фона контейнера */
+            border-radius: 5px;
+            /* Углы контейнера */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* Тень под контейнером */
+        }
+
+        .main-title {
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            /* Кнопка шириной 100% */
+        }
+
+        .form-text {
+            font-size: 0.9rem;
+            /* Размер текста для рекомендаций */
+            color: #6c757d;
+            /* Цвет текста для рекомендаций */
+        }
+
+        .text-danger {
+            font-size: 0.9rem;
+            /* Размер текста для ошибок */
+            color: red;
+            /* Цвет текста для ошибок */
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <div class="signup-container">
+        <h1 class="main-title text-center">Регистрация</h1>
+        <p class="text-center description">Создайте аккаунт, чтобы начать с нами!</p>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                <div class="form-text">Введите ваше имя пользователя.</div>
+            </div>
+            <div class="mb-3">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                <div class="form-text">Введите действующий адрес электронной почты.</div>
+            </div>
+            <div class="mb-3">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                <div class="form-text">Создайте пароль (не менее 8 символов, должен содержать строчные и прописные буквы, цифры и специальные символы).</div>
+                {% if form.password1.errors and form.password1.value %}
+                    <div class="text-danger">
+                        {{ form.password1.errors|join:", " }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.password2.label_tag }}
+
+                {{ form.password2 }}
+
+                <div class="form-text">Пожалуйста, повторите пароль, чтобы подтвердить его.</div>
+
+                {% if form.password2.errors and form.password2.value %}
+                    <div class="text-danger">
+                        {{ form.password2.errors|join:", " }}
+
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <p>У вас уже есть аккаунт? <a href="{% url 'account_login' %}">Войдите</a></p>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

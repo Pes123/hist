@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выход</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Цвет фона страницы */
+        }
+
+        .logout-container {
+            display: flex;
+            flex-direction: column; /* Вертикальное расположение элементов */
+            justify-content: center; /* Центрирование по вертикали */
+            align-items: center; /* Центрирование по горизонтали */
+            height: 100vh; /* Высота контейнера на всю высоту экрана */
+            text-align: center; /* Центрирование текста */
+        }
+
+        .button-style {
+            background-color: #007bff; /* Цвет кнопки */
+            color: white; /* Цвет текста на кнопке */
+            border: none; /* Без рамки */
+            position: relative; /* Для анимации */
+            transition: transform 0.2s ease, background-color 0.3s ease; /* Плавный переход */
+            padding: 10px 20px; /* Отступы кнопки */
+            font-size: 20px; /* Размер текста на кнопке */
+        }
+
+        .button-style:hover {
+            background-color: #0056b3; /* Цвет кнопки при наведении */
+            transform: scale(1.05); /* Увеличение кнопки */
+        }
+
+        .logout-title {
+            font-size: 24px; /* Размер заголовка */
+            margin-bottom: 20px; /* Отступ снизу */
+        }
+
+        .logout-description {
+            margin-bottom: 30px; /* Отступ для описания */
+            font-size: 18px; /* Размер текста описания */
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <div class="logout-container">
+        <p class="logout-description">Нажмите кнопку ниже, чтобы выйти из своего аккаунта.</p>
+        
+        {% url 'account_logout' as action_url %}
+        <form method="post" action="{{ action_url }}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'home' %}"> 
+            <button type="submit" class="btn button-style">Выйти</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

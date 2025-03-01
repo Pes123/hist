@@ -9,26 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <!-- Navigation Header -->
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-custom">
-            <div class="container">
-                <a class="navbar-brand" href="{% url 'home'%}">Главная</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'posts:text_list' %}">Список Эссе</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'posts:text_entry' %}">Добавить Эссе</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+    {% include 'includes/navbar.html' %}
 
     <div class="container">
         <h1 class="text-center my-4">Добавьте Ваше эссе</h1>

@@ -17,12 +17,12 @@ body, html {
 
 .dynamic-textarea {
     width: 100%; 
-    max-height: 200px; /* Задайте максимальную высоту для текстового поля */
+    max-height: 200px;
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 4px;
     resize: none; 
-    overflow: auto; /* Позволяет прокрутку */
+    overflow: auto; 
     transition: height 0.2s ease; 
 }
 
@@ -141,7 +141,7 @@ body, html {
 .btn {
     position: relative;
     overflow: hidden;
-    display: inline-block; /* Убедитесь, что кнопка отображается как блочный элемент */
+    display: inline-block; 
 }
 
 .btn .text,
@@ -151,28 +151,27 @@ body, html {
     left: 50%;
     transform: translate(-50%, -50%);
     transition: opacity 0.3s ease;
-    white-space: nowrap; /* Убедитесь, что текст не переносится */
+    white-space: nowrap; 
 }
 
 .btn .text-hidden {
-    opacity: 0; /* Скрытый текст по умолчанию */
+    opacity: 0;
 }
 
 .btn:hover .text {
-    opacity: 0; /* Исчезает при наведении */
+    opacity: 0; 
 }
-
 .btn:hover .text-hidden {
-    opacity: 1; /* Появляется при наведении */
+    opacity: 1; 
 }
 
 
 .navbar-brand {
-    color: white; /* Цвет текста по умолчанию */
-    transition: color 0.5s ease; /* Плавный переход цвета */
+    color: white; 
+    transition: color 0.5s ease; 
 }
 
 .navbar-brand:hover {
-    color: #ffcc00; /* Цвет текста при наведении */
-    text-decoration: none; /* Убираем подчеркивание */
+    color: #ffcc00; 
+    text-decoration: none; 
 }

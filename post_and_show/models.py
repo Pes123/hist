@@ -7,5 +7,3 @@ class user_text(models.Model):
     rating = models.IntegerField()
     text = models.TextField()
     text_name = models.TextField()
-    
-
