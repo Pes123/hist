@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эссе пользователей</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    {% include 'includes/navbar.html' %}
+    <div class="background-image">
+        <div class="container">
+            <h1 class="text-center my-4">Эссе пользователей</h1>
+
+            <div class="text-center mb-3">
+                <label for="sortOrder">Сортировка:</label>
+                <div class="d-inline-block">
+                    <select id="sortOrder" class="form-select" onchange="changeSort()">
+                        <option value="rating-asc" {% if sort_by == 'rating' and sort_order == 'asc' %}selected{% endif %}>Рейтинг по возрастанию</option>
+                        <option value="rating-desc" {% if sort_by == 'rating' and sort_order == 'desc' %}selected{% endif %}>Рейтинг по убыванию</option>
+                        <option value="date-asc" {% if sort_by == 'date' and sort_order == 'asc' %}selected{% endif %}>Дата добавления по возрастанию</option>
+                        <option value="date-desc" {% if sort_by == 'date' and sort_order == 'desc' %}selected{% endif %}>Дата добавления по убыванию</option>
+                    </select>
+                </div>
+            </div>
+
+            <ul class="list-unstyled">
+                {% for text in page_obj %}
+                    <li class="text-item mb-3">
+                        <div class="card p-3">
+                            <p>Автор: <strong>{{ text.user_name }}</strong></p>
+                            <p>Название текста: <strong>{{ text.text_name }}</strong></p>
+                            <p>Рейтинг: {{ text.rating }}</p>
+                            <p>Дата: {{ text.creation_time|date:"d.m.Y H:i" }}</p>
+
+                            {% if user.is_authenticated %}
+                                <!-- Поле для выбора рейтинга -->
+                                <div>
+                                    <label for="rating-{{ text.id }}">Рейтинг:</label>
+                                    <select id="rating-{{ text.id }}" class="form-select" onchange="submitRating({{ text.id }})">
+                                        <option value="">Выберите оценку</option>
+                                        {% for i in "12345" %}
+                                            <option value="{{ i }}" {% if user_ratings.text_id == text.id and user_ratings.rating == i %}selected{% endif %}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% else %}
+                                <p>Чтобы оценить текст, пожалуйста, <a href="{% url 'login' %}">войдите в систему</a>.</p>
+                            {% endif %}
+
+                            <button class="btn btn-secondary" onclick="toggleText({{ text.id }})">Отобразить текст</button>
+                            <div id="text-{{ text.id }}" class="text-details">
+                                <textarea id="textarea-{{ text.id }}" class="dynamic-textarea" readonly>{{ text.text }}</textarea>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            
+            <div class="pagination text-center">
+                <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+                <div>
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1&sort={{ sort_order }}&by={{ sort_by }}">« Первая</a>
+                        <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort_order }}&by={{ sort_by }}">« Назад</a>
+                    {% endif %}
+                    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&sort={{ sort_order }}&by={{ sort_by }}">Вперед »</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}&sort={{ sort_order }}&by={{ sort_by }}">Последняя »»</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTextId = null;
+
+        function toggleText(textId) {
+            const textElement = document.getElementById(`text-${textId}`);
+            const textarea = document.getElementById(`textarea-${textId}`);
+            if (currentTextId === textId) {
+                textElement.classList.remove("shown");
+                currentTextId = null; 
+            } else {
+                if (currentTextId !== null) {
+                    const previousTextElement = document.getElementById(`text-${currentTextId}`);
+                    previousTextElement.classList.remove("shown");
+                    
+                    const previousTextarea = document.getElementById(`textarea-${currentTextId}`);
+                    previousTextarea.style.height = 'auto';
+                }
+
+                currentTextId = textId;
+                textElement.classList.add("shown");
+                textarea.style.height = 'auto'; 
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+        }
+
+        function changeSort() {
+            const selectedValue = document.getElementById('sortOrder').value;
+            const [sortBy, sortDirection] = selectedValue.split('-');
+            window.location.href = `?sort=${sortDirection}&by=${sortBy}`;
+        }
+
+        function submitRating(textId) {
+            const rating = document.getElementById(`rating-${textId}`).value;
+            if (rating) {
+                $.ajax({
+                    url: "{% url 'posts:submit_rating' %}",
+                    type: "POST",
+                    data: {
+                        text_id: textId,
+                        rating: rating,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'  // Добавляем CSRF токен
+                    },
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            alert('Рейтинг успешно обновлен!');
+                            
+                        } else {
+                            alert('Ошибка при обновлении рейтинга.');
+                        }
+                    },
+                    error: function() {
+                        alert('Ошибка при отправке запроса.');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
